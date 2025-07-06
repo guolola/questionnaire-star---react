@@ -41,42 +41,43 @@ const router = createBrowserRouter([
         path: '/register',
         element: <Register />,
       },
+      // 管理模块路由组 - 使用ManageLayout布局
+      {
+        path: '/manage',
+        element: <ManageLayout />,
+        children: [
+          {
+            path: 'list', // 访问路径: /manage/list
+            element: <ManageList />,
+          },
+          {
+            path: 'star', // 访问路径: /manage/star
+            element: <ManageStart />,
+          },
+          {
+            path: 'trash', // 访问路径: /manage/trash
+            element: <ManageTrash />,
+          },
+        ],
+      },
+      // 问卷模块路由组 - 使用QuestionLayout布局
+      {
+        path: '/question',
+        element: <QuestionLayout />,
+        children: [
+          {
+            path: 'edit/:id', // 访问路径: /question/edit
+            element: <QuestionEdit />,
+          },
+          {
+            path: 'stat/:id', // 访问路径: /question/stat
+            element: <QuestionStat />,
+          },
+        ],
+      },
     ],
   },
-  // 管理模块路由组 - 使用ManageLayout布局
-  {
-    path: '/manage',
-    element: <ManageLayout />,
-    children: [
-      {
-        path: 'list', // 访问路径: /manage/list
-        element: <ManageList />,
-      },
-      {
-        path: 'star', // 访问路径: /manage/star
-        element: <ManageStart />,
-      },
-      {
-        path: 'trash', // 访问路径: /manage/trash
-        element: <ManageTrash />,
-      },
-    ],
-  },
-  // 问卷模块路由组 - 使用QuestionLayout布局
-  {
-    path: '/question',
-    element: <QuestionLayout />,
-    children: [
-      {
-        path: 'edit/:id', // 访问路径: /question/edit
-        element: <QuestionEdit />,
-      },
-      {
-        path: 'stat/:id', // 访问路径: /question/stat
-        element: <QuestionStat />,
-      },
-    ],
-  },
+
   // 404页面路由 - 匹配所有未定义的路径
   {
     path: '*',

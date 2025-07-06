@@ -3,7 +3,6 @@ import { Empty, Typography, Table, Tag, Space, Button, Modal, message } from 'an
 import styles from './styles/common.module.scss';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 
-
 const { Title } = Typography;
 const { confirm } = Modal;
 // 定义问卷数据类型
@@ -55,7 +54,7 @@ const Star = () => {
   // 记录选中的id
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
-  function del(){
+  function del() {
     confirm({
       title: '确定要删除吗该问卷吗？',
       icon: <ExclamationCircleOutlined />,

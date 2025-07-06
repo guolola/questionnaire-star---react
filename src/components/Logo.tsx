@@ -10,10 +10,10 @@ const Logo = () => {
     <div className={styles.container}>
       <Link to="/">
         <Space>
-          <Title>
+          <Title style={{ margin: 0 }}>
             <FormOutlined />
           </Title>
-          <Title>小慕问卷</Title>
+          <Title style={{ margin: 0 }}>小慕问卷</Title>
         </Space>
       </Link>
     </div>
