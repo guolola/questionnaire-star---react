@@ -4,14 +4,86 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-image: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+  background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+  position: relative;
+  overflow: hidden;
+
+  // 动态渐变光斑
+  &::before, &::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.5;
+    animation: float 8s infinite alternate;
+    z-index: 0;
+  }
+  &::before {
+    width: 400px;
+    height: 400px;
+    left: -100px;
+    top: 10%;
+    background: #4facfe;
+    animation-delay: 0s;
+  }
+  &::after {
+    width: 300px;
+    height: 300px;
+    right: -80px;
+    bottom: 10%;
+    background: #00f2fe;
+    animation-delay: 2s;
+  }
+
+  @keyframes float {
+    0% { transform: translateY(0) scale(1);}
+    100% { transform: translateY(40px) scale(1.1);}
+  }
 
   .info {
+    position: relative;
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.35);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+    backdrop-filter: blur(8px);
+    border-radius: 24px;
+    padding: 48px 40px 32px 40px;
     text-align: center;
+    margin-bottom: 32px;
+    min-width: 340px;
 
-    button {
-      height: 60px;
-      font-size: 24px;
+    h1, .ant-typography {
+      color: #1a237e;
+      text-shadow: 0 2px 8px rgba(79, 172, 254, 0.15);
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+
+    .ant-typography {
+      color: #1565c0;
+      font-size: 18px;
+      margin-top: 12px;
+      margin-bottom: 0;
+    }
+  }
+
+  button {
+    height: 60px;
+    font-size: 24px;
+    padding: 0 48px;
+    border-radius: 32px;
+    background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+    box-shadow: 0 4px 24px 0 rgba(79, 172, 254, 0.18);
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 1px;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+
+    &:hover {
+      transform: translateY(-4px) scale(1.04);
+      box-shadow: 0 8px 32px 0 rgba(0, 242, 254, 0.25);
+      background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
     }
   }
 }
