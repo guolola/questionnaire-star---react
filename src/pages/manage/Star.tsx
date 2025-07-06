@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Empty, Typography } from 'antd';
 import QuestionCard from '../../components/QuestionCard';
 import styles from './styles/common.module.scss';
- 
+
 const { Title } = Typography;
 
 // 定义问卷数据类型
@@ -50,20 +50,22 @@ const rawQuestionList: QuestionType[] = [
   },
 ];
 const Star = () => {
+  const [questionList, setQuestionList] = useState(rawQuestionList);
   return (
     <>
       <div className={styles.header}>
         <div className={styles.left}>
-          <Title level={3}>我的问卷</Title>
+          <Title level={3}>星标问卷</Title>
         </div>
         <div className={styles.right}>(搜索)</div>
       </div>
       <div className={styles.content}>
-        {rawQuestionList.length === 0 && <Empty description="暂无数据" />}
-        {rawQuestionList.length > 0 && rawQuestionList.map((q: QuestionType) => { 
-          const { _id } = q;
-          return <QuestionCard key={_id} {...q} />;
-        })}
+        {questionList.length === 0 && <Empty description="暂无数据" />}
+        {questionList.length > 0 &&
+          questionList.map((q: QuestionType) => {
+            const { _id } = q;
+            return <QuestionCard key={_id} {...q} />;
+          })}
       </div>
       <div className={styles.footer}>loadMore... 上滑加载更多</div>
     </>
