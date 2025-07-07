@@ -9,8 +9,9 @@
   overflow: hidden;
 
   // 动态渐变光斑
-  &::before, &::after {
-    content: "";
+  &::before,
+  &::after {
+    content: '';
     position: absolute;
     border-radius: 50%;
     filter: blur(60px);
@@ -36,8 +37,12 @@
   }
 
   @keyframes float {
-    0% { transform: translateY(0) scale(1);}
-    100% { transform: translateY(40px) scale(1.1);}
+    0% {
+      transform: translateY(0) scale(1);
+    }
+    100% {
+      transform: translateY(40px) scale(1.1);
+    }
   }
 
   .info {
@@ -52,7 +57,8 @@
     margin-bottom: 32px;
     min-width: 340px;
 
-    h1, .ant-typography {
+    h1,
+    .ant-typography {
       color: #1a237e;
       text-shadow: 0 2px 8px rgba(79, 172, 254, 0.15);
       font-weight: 700;
@@ -78,7 +84,10 @@
     color: #fff;
     font-weight: 600;
     letter-spacing: 1px;
-    transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s,
+      background 0.3s;
 
     &:hover {
       transform: translateY(-4px) scale(1.04);
