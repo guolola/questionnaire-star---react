@@ -1,66 +1,13 @@
-import React, { useState } from 'react';
-import { Typography } from 'antd';
+import { Spin, Typography } from 'antd';
 import QuestionCard from '../../components/QuestionCard';
 import ListSearch from '../../components/ListSearch';
 import styles from './styles/common.module.scss';
+import useLoadQuestionListData from '../../hooks/useLoadQuestionListData';
 
 const { Title } = Typography;
-// 定义问卷数据类型
-type QuestionType = {
-  _id: string;
-  title: string;
-  isStar: boolean;
-  isPublished: boolean;
-  answerCount: number;
-  createdAt: string;
-};
-
-// 模拟问卷数据
-const rawQuestionList: QuestionType[] = [
-  {
-    _id: '1',
-    title: '用户满意度调查',
-    isStar: true,
-    isPublished: true,
-    answerCount: 10,
-    createdAt: '2024-05-01',
-  },
-  {
-    _id: '2',
-    title: '产品功能反馈',
-    isStar: false,
-    isPublished: false,
-    answerCount: 5,
-    createdAt: '2024-05-02',
-  },
-  {
-    _id: '3',
-    title: '市场调研问卷',
-    isStar: true,
-    isPublished: true,
-    answerCount: 8,
-    createdAt: '2024-05-03',
-  },
-  {
-    _id: '4',
-    title: '员工培训评估',
-    isStar: false,
-    isPublished: false,
-    answerCount: 3,
-    createdAt: '2024-05-04',
-  },
-  {
-    _id: '5',
-    title: '客户需求分析',
-    isStar: false,
-    isPublished: true,
-    answerCount: 12,
-    createdAt: '2024-05-05',
-  },
-];
-
 const List = () => {
-  const [questionList, setQuestionList] = useState(rawQuestionList);
+  const { data = {}, loading } = useLoadQuestionListData();
+  const { list = [], total = 0 } = data || {};
 
   return (
     <>
@@ -73,8 +20,13 @@ const List = () => {
         </div>
       </div>
       <div className={styles.content}>
-        {questionList.length > 0 &&
-          questionList.map((q: QuestionType) => {
+        {loading && (
+          <div style={{ textAlign: 'center' }}>
+            <Spin />
+          </div>
+        )}
+        {list.length > 0 &&
+          list.map(q => {
             const { _id } = q;
             return <QuestionCard key={_id} {...q} />;
           })}

@@ -1,11 +1,11 @@
-import React from 'react';
+import useLoadQuestionData from '../../../hooks/useLoadQuestionData';
 
 const Stat = () => {
+  const { loading, data } = useLoadQuestionData();
   return (
-    <div className="stat">
-      <div className="stat-title">Total page views</div>
-      <div className="stat-value">1,200</div>
-      <div className="stat-desc">Jan 1st - Feb 1st</div>
+    <div>
+      <p>Stat page</p>
+      {loading ? <p>loading</p> : <p>{JSON.stringify(data)}</p>}
     </div>
   );
 };

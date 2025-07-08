@@ -1,57 +1,15 @@
 import React, { useState } from 'react';
-import { Empty, Typography, Table, Tag, Space, Button, Modal, message } from 'antd';
+import { Empty, Typography, Table, Tag, Space, Button, Modal, message, Spin } from 'antd';
 import styles from './styles/common.module.scss';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import ListSearch from '../../components/ListSearch';
+import useLoadQuestionListData from '../../hooks/useLoadQuestionListData';
 
 const { Title } = Typography;
 const { confirm } = Modal;
-// 定义问卷数据类型
-type QuestionType = {
-  _id: string;
-  title: string;
-  isStar: boolean;
-  isPublished: boolean;
-  answerCount: number;
-  createdAt: string;
-};
-// 模拟问卷数据
-const rawQuestionList: QuestionType[] = [
-  {
-    _id: '1',
-    title: '用户满意度调查',
-    isStar: true,
-    isPublished: true,
-    answerCount: 10,
-    createdAt: '2024-05-01',
-  },
-  {
-    _id: '2',
-    title: '产品功能反馈',
-    isStar: true,
-    isPublished: false,
-    answerCount: 5,
-    createdAt: '2024-05-02',
-  },
-  {
-    _id: '3',
-    title: '市场调研问卷',
-    isStar: true,
-    isPublished: true,
-    answerCount: 8,
-    createdAt: '2024-05-03',
-  },
-  {
-    _id: '4',
-    title: '员工培训评估',
-    isStar: true,
-    isPublished: false,
-    answerCount: 3,
-    createdAt: '2024-05-04',
-  },
-];
 const Star = () => {
-  const [questionList, setQuestionList] = useState(rawQuestionList);
+  const { data = {}, loading } = useLoadQuestionListData({ isDeleted: true });
+  const { list: questionList = [], total = 0 } = data;
   // 记录选中的id
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
@@ -81,10 +39,6 @@ const Star = () => {
     {
       title: '答卷数量',
       dataIndex: 'answerCount',
-    },
-    {
-      title: '操作',
-      dataIndex: 'action',
     },
   ];
   // 可以把JSX作为一个变量
@@ -125,7 +79,12 @@ const Star = () => {
         </div>
       </div>
       <div className={styles.content}>
-        {questionList.length === 0 && <Empty description="暂无数据" />}
+        {loading && (
+          <div style={{ textAlign: 'center' }}>
+            <Spin />
+          </div>
+        )}
+        {!loading && questionList.length === 0 && <Empty description="暂无数据" />}
         {questionList.length > 0 && TableElem}
       </div>
       <div className={styles.footer}>loadMore... 上滑加载更多</div>

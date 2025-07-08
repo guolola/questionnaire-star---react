@@ -1,18 +1,37 @@
-import React from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { Button, Space, Divider } from 'antd';
+import { Button, Space, Divider, message } from 'antd';
 import { PlusOutlined, BarsOutlined, StarOutlined, DeleteOutlined } from '@ant-design/icons';
+import { useRequest } from 'ahooks';
+import { createQuestionService } from '../services/question';
 import styles from './styles/ManageLayout.module.scss';
 
 const ManageLayout = () => {
   const nav = useNavigate();
   // 获取当前路由
   const { pathname } = useLocation();
+  const {
+    loading,
+    error,
+    run: handleCreateClick,
+  } = useRequest(createQuestionService, {
+    manual: true,
+    onSuccess(result) {
+      // 成功后跳转到编辑页面
+      nav(`/question/edit/${result.id}`);
+    },
+  });
+
   return (
     <div className={styles.container}>
       <div className={styles.left}>
         <Space direction="vertical">
-          <Button type="primary" size="large" icon={<PlusOutlined />}>
+          <Button
+            type="primary"
+            size="large"
+            icon={<PlusOutlined />}
+            onClick={handleCreateClick}
+            disabled={loading}
+          >
             新建问卷
           </Button>
           <Divider style={{ borderTop: 'transparent' }} />
@@ -50,3 +69,6 @@ const ManageLayout = () => {
 };
 
 export default ManageLayout;
+function nav(arg0: string) {
+  throw new Error('Function not implemented.');
+}
