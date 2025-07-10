@@ -60,20 +60,20 @@ const router = createBrowserRouter([
           },
         ],
       },
-      // 问卷模块路由组 - 使用QuestionLayout布局
+    ],
+  },
+  // 问卷模块路由组 - 使用QuestionLayout布局
+  {
+    path: '/question',
+    element: <QuestionLayout />,
+    children: [
       {
-        path: '/question',
-        element: <QuestionLayout />,
-        children: [
-          {
-            path: 'edit/:id', // 访问路径: /question/edit
-            element: <QuestionEdit />,
-          },
-          {
-            path: 'stat/:id', // 访问路径: /question/stat
-            element: <QuestionStat />,
-          },
-        ],
+        path: 'edit/:id', // 访问路径: /question/edit
+        element: <QuestionEdit />,
+      },
+      {
+        path: 'stat/:id', // 访问路径: /question/stat
+        element: <QuestionStat />,
       },
     ],
   },
