@@ -1,0 +1,36 @@
+import { Form, Input, Checkbox, Select } from 'antd';
+import { type QuestionTitlePropsType } from '../QuestionTitle/interface';
+import { useEffect } from 'react';
+
+const PropComponent = (props: QuestionTitlePropsType) => {
+  const { text, level, isCenter } = props;
+  const [form] = Form.useForm();
+  useEffect(() => {
+    form.setFieldsValue({ text, level, isCenter });
+  }, [text, level, isCenter]);
+  return (
+    <Form layout="vertical" initialValues={{ text, level, isCenter }}>
+      <Form.Item
+        label="标题内容"
+        name="text"
+        rules={[{ required: true, message: '请输入标题内容' }]}
+      >
+        <Input></Input>
+      </Form.Item>
+      <Form.Item label="层级">
+        <Select
+          options={[
+            { value: 1, text: '1' },
+            { value: 2, text: '2' },
+            { value: 3, text: '3' },
+          ]}
+        ></Select>
+      </Form.Item>
+      <Form.Item name="isCenter" valuePropName="checked">
+        <Checkbox>标题居中</Checkbox>
+      </Form.Item>
+    </Form>
+  );
+};
+
+export default PropComponent;

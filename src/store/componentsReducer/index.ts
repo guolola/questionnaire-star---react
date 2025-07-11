@@ -27,8 +27,23 @@ export const componentsSlice = createSlice({
     changeSelectedId: (draft, action) => {
       draft.selectedId = action.payload;
     },
+    // 添加新组件
+    addComponent: (draft, action) => {
+      const newComponent = action.payload;
+      const { componentList, selectedId } = draft;
+      const index = componentList.findIndex(c => c.fe_id === selectedId);
+      if (index < 0) {
+        // 画布中未选中任何组件插入到末尾
+        draft.componentList.push(newComponent);
+      } else {
+        // 画布中选中组件，插入到index后面
+        draft.componentList.splice(index + 1, 0, newComponent);
+      }
+      // 重新设置选中组件
+      draft.selectedId = newComponent.fe_id;
+    },
   },
 });
 
-export const { resetComponents, changeSelectedId } = componentsSlice.actions;
+export const { resetComponents, changeSelectedId, addComponent } = componentsSlice.actions;
 export default componentsSlice.reducer;
