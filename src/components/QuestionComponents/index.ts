@@ -7,6 +7,7 @@ export type ComponentConfType = {
   title: string;
   type: string;
   Component: React.FC<ComponentPropsType>;
+  PropComponent: React.FC<ComponentPropsType>;
   defaultProps: ComponentPropsType;
 };
 

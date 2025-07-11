@@ -5,6 +5,8 @@ import styles from './styles/index.module.scss';
 import EditCanvas from './EditCanvas';
 // 引入左侧面板组件
 import LeftPanel from './LeftPanel';
+// 引入右侧面板组件
+import RightPanel from './RightPanel';
 import { useDispatch } from 'react-redux';
 import { changeSelectedId } from '../../../store/componentsReducer';
 const Edit = () => {
@@ -28,7 +30,9 @@ const Edit = () => {
               </div>
             </div>
           </div>
-          <div className={styles.right}>Right</div>
+          <div className={styles.right}>
+            <RightPanel />
+          </div>
         </div>
       </div>
     </div>
