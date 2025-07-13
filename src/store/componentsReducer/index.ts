@@ -1,6 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, nanoid } from '@reduxjs/toolkit';
 import { type ComponentPropsType } from '../../components/QuestionComponents';
-import { getNextSelectedId } from './utils';
+import { getNextSelectedId , insertNewComponent } from './utils';
+import cloneDeep from 'lodash/cloneDeep';
 
 export type ComponentInfoType = {
   fe_id: string; // 前端组件唯一标识符
@@ -14,9 +15,14 @@ export type ComponentInfoType = {
 export type ComponentsStateType = {
   selectedId: string;
   componentList: ComponentInfoType[];
+  copiedComponent: ComponentInfoType | null;
 };
 
-const INIT_STATE: ComponentsStateType = { selectedId: '', componentList: [] };
+const INIT_STATE: ComponentsStateType = {
+  selectedId: '',
+  componentList: [],
+  copiedComponent: null,
+};
 
 export const componentsSlice = createSlice({
   name: 'components',
@@ -33,17 +39,7 @@ export const componentsSlice = createSlice({
     // 添加新组件
     addComponent: (draft, action) => {
       const newComponent = action.payload;
-      const { componentList, selectedId } = draft;
-      const index = componentList.findIndex(c => c.fe_id === selectedId);
-      if (index < 0) {
-        // 画布中未选中任何组件插入到末尾
-        draft.componentList.push(newComponent);
-      } else {
-        // 画布中选中组件，插入到index后面
-        draft.componentList.splice(index + 1, 0, newComponent);
-      }
-      // 重新设置选中组件
-      draft.selectedId = newComponent.fe_id;
+      insertNewComponent(draft, newComponent)
     },
     // 修改组件属性
     changeComponentProps: (draft, action) => {
@@ -86,6 +82,42 @@ export const componentsSlice = createSlice({
         targetComponent.isLocked = !targetComponent.isLocked;
       }
     },
+    // 拷贝 组件
+    copyComponent: draft => {
+      const { selectedId, componentList } = draft;
+      const targetComponent = componentList.find(c => c.fe_id === selectedId);
+      if (selectedId == null) return;
+      draft.copiedComponent = cloneDeep(targetComponent); // 深拷贝
+    },
+    // 粘贴 组件
+    pasteComponent: draft => { 
+      const { copiedComponent } = draft;
+      if (copiedComponent == null) return
+      // 要把fe_id修改了，注意！
+      copiedComponent.fe_id = nanoid();
+      insertNewComponent(draft, copiedComponent);
+    },
+    // 选中上一个
+    selectPrevComponent:((draft: ComponentsStateType) => {
+      const { selectedId, componentList } = draft
+      const selectedIndex = componentList.findIndex(c => c.fe_id === selectedId)
+
+      if (selectedIndex < 0) return // 未选中组件
+      if (selectedIndex <= 0) return // 已经选中了第一个，无法在向上选中
+
+      draft.selectedId = componentList[selectedIndex - 1].fe_id
+    }),
+
+    // 选中下一个
+    selectNextComponent:((draft: ComponentsStateType) => {
+      const { selectedId, componentList } = draft
+      const selectedIndex = componentList.findIndex(c => c.fe_id === selectedId)
+
+      if (selectedIndex < 0) return // 未选中组件
+      if (selectedIndex + 1 === componentList.length) return // 已经选中了最后一个，无法再向下选中
+
+      draft.selectedId = componentList[selectedIndex + 1].fe_id
+    }),
   },
 });
 
@@ -97,5 +129,10 @@ export const {
   removeSelectedComponent,
   changeComponentHidden,
   toggleComponentLock,
+  copyComponent,
+  pasteComponent,
+  selectPrevComponent,
+  selectNextComponent,
+
 } = componentsSlice.actions;
 export default componentsSlice.reducer;

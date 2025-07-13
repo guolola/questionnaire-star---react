@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import useGetComponentInfo from '../../../hooks/useGetComponentInfo';
 import { getComponentConfByType } from '../../../components/QuestionComponents';
 import { changeSelectedId, type ComponentInfoType } from '../../../store/componentsReducer';
+import useBindCanvasKeyPress from '../../../hooks/useBindCanvasKeyPress';
 
 type PropsType = {
   loading: boolean;
@@ -22,10 +23,12 @@ function genComponent(componentInfo: ComponentInfoType) {
 const EditCanvas: React.FC<PropsType> = ({ loading }) => {
   const { componentList, selectedId } = useGetComponentInfo();
   const dispatch = useDispatch();
-  function hadleClick(event: React.MouseEvent, id: string) {
+  function handleClick(event: React.MouseEvent, id: string) {
     event.stopPropagation();
     dispatch(changeSelectedId(id));
   }
+  // 绑定快捷键
+  useBindCanvasKeyPress()
   if (loading)
     return (
       <div>
@@ -37,7 +40,7 @@ const EditCanvas: React.FC<PropsType> = ({ loading }) => {
       {componentList
         .filter(c => !c.isHidden)
         .map(c => {
-          const { fe_id , isLocked} = c;
+          const { fe_id, isLocked } = c;
           // 拼接class name
           const wrapperDefaultClassName = styles['component-wrapper'];
           const selectedClassnName = styles.selected;
@@ -48,7 +51,7 @@ const EditCanvas: React.FC<PropsType> = ({ loading }) => {
             [lockedClassName]: isLocked,
           });
           return (
-            <div key={fe_id} className={wrapperClassName} onClick={e => hadleClick(e, fe_id)}>
+            <div key={fe_id} className={wrapperClassName} onClick={e => handleClick(e, fe_id)}>
               <div className={styles.component}>{genComponent(c)}</div>
             </div>
           );

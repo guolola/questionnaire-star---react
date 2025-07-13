@@ -1,4 +1,4 @@
-import { type ComponentInfoType } from './index';
+import { type ComponentInfoType, type ComponentsStateType } from './index';
 
 export function getNextSelectedId(fe_id: string, componentList: ComponentInfoType[]) {
   const visibleComponentList = componentList.filter(c => !c.isHidden);
@@ -20,4 +20,19 @@ export function getNextSelectedId(fe_id: string, componentList: ComponentInfoTyp
     }
   }
   return newSelectedId;
+}
+
+// 插入新组件
+export function insertNewComponent(draft: ComponentsStateType, newComponent: ComponentInfoType) {
+  const { componentList, selectedId } = draft;
+  const index = componentList.findIndex(c => c.fe_id === selectedId);
+  if (index < 0) {
+    // 画布中未选中任何组件插入到末尾
+    draft.componentList.push(newComponent);
+  } else {
+    // 画布中选中组件，插入到index后面
+    draft.componentList.splice(index + 1, 0, newComponent);
+  }
+  // 重新设置选中组件
+  draft.selectedId = newComponent.fe_id;
 }

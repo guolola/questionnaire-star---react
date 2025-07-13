@@ -3,7 +3,7 @@ import { type QuestionTitlePropsType } from '../QuestionTitle/interface';
 import { useEffect } from 'react';
 
 const PropComponent = (props: QuestionTitlePropsType) => {
-  const { text, level, isCenter, onChange,disabled } = props;
+  const { text, level, isCenter, onChange, disabled } = props;
   const [form] = Form.useForm();
   useEffect(() => {
     form.setFieldsValue({ text, level, isCenter });

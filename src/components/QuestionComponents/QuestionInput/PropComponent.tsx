@@ -2,7 +2,7 @@ import { Form, Input } from 'antd';
 import { type QuestionInputPropsType } from './interface';
 import { useEffect } from 'react';
 const PropComponent = (props: QuestionInputPropsType) => {
-  const { title, placeholder, onChange,disabled } = props;
+  const { title, placeholder, onChange, disabled } = props;
   const [form] = Form.useForm();
 
   useEffect(() => {

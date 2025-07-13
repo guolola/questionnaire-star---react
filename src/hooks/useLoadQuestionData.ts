@@ -28,7 +28,7 @@ function useLoadQuestionData() {
         selectedId = componentList[0].fe_id;
       }
       // 把 componentList 设置到 redux store 中
-      dispatch(resetComponents({ componentList, selectedId }));
+      dispatch(resetComponents({ componentList, selectedId, copiedComponent: null }));
     }
   }, [data]);
   // 判断 id 变化，执行 ajax 加载问卷数据

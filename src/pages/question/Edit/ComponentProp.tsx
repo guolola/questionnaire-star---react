@@ -11,7 +11,7 @@ const ComponentProp = () => {
   const dispatch = useDispatch();
   const { selectedComponent } = useGetComponentInfo();
   if (!selectedComponent) return <NoProp />;
-  const { type, props ,isLocked} = selectedComponent;
+  const { type, props, isLocked } = selectedComponent;
   const ComponentConf = getComponentConfByType(type);
   if (!ComponentConf) return <NoProp />;
   const { PropComponent } = ComponentConf;
