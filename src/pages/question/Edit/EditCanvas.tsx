@@ -28,7 +28,7 @@ const EditCanvas: React.FC<PropsType> = ({ loading }) => {
     dispatch(changeSelectedId(id));
   }
   // 绑定快捷键
-  useBindCanvasKeyPress()
+  useBindCanvasKeyPress();
   if (loading)
     return (
       <div>

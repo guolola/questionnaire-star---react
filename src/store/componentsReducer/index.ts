@@ -1,6 +1,6 @@
 import { createSlice, nanoid } from '@reduxjs/toolkit';
 import { type ComponentPropsType } from '../../components/QuestionComponents';
-import { getNextSelectedId , insertNewComponent } from './utils';
+import { getNextSelectedId, insertNewComponent } from './utils';
 import cloneDeep from 'lodash/cloneDeep';
 
 export type ComponentInfoType = {
@@ -39,7 +39,7 @@ export const componentsSlice = createSlice({
     // 添加新组件
     addComponent: (draft, action) => {
       const newComponent = action.payload;
-      insertNewComponent(draft, newComponent)
+      insertNewComponent(draft, newComponent);
     },
     // 修改组件属性
     changeComponentProps: (draft, action) => {
@@ -90,34 +90,34 @@ export const componentsSlice = createSlice({
       draft.copiedComponent = cloneDeep(targetComponent); // 深拷贝
     },
     // 粘贴 组件
-    pasteComponent: draft => { 
+    pasteComponent: draft => {
       const { copiedComponent } = draft;
-      if (copiedComponent == null) return
+      if (copiedComponent == null) return;
       // 要把fe_id修改了，注意！
       copiedComponent.fe_id = nanoid();
       insertNewComponent(draft, copiedComponent);
     },
     // 选中上一个
-    selectPrevComponent:((draft: ComponentsStateType) => {
-      const { selectedId, componentList } = draft
-      const selectedIndex = componentList.findIndex(c => c.fe_id === selectedId)
+    selectPrevComponent: (draft: ComponentsStateType) => {
+      const { selectedId, componentList } = draft;
+      const selectedIndex = componentList.findIndex(c => c.fe_id === selectedId);
 
-      if (selectedIndex < 0) return // 未选中组件
-      if (selectedIndex <= 0) return // 已经选中了第一个，无法在向上选中
+      if (selectedIndex < 0) return; // 未选中组件
+      if (selectedIndex <= 0) return; // 已经选中了第一个，无法在向上选中
 
-      draft.selectedId = componentList[selectedIndex - 1].fe_id
-    }),
+      draft.selectedId = componentList[selectedIndex - 1].fe_id;
+    },
 
     // 选中下一个
-    selectNextComponent:((draft: ComponentsStateType) => {
-      const { selectedId, componentList } = draft
-      const selectedIndex = componentList.findIndex(c => c.fe_id === selectedId)
+    selectNextComponent: (draft: ComponentsStateType) => {
+      const { selectedId, componentList } = draft;
+      const selectedIndex = componentList.findIndex(c => c.fe_id === selectedId);
 
-      if (selectedIndex < 0) return // 未选中组件
-      if (selectedIndex + 1 === componentList.length) return // 已经选中了最后一个，无法再向下选中
+      if (selectedIndex < 0) return; // 未选中组件
+      if (selectedIndex + 1 === componentList.length) return; // 已经选中了最后一个，无法再向下选中
 
-      draft.selectedId = componentList[selectedIndex + 1].fe_id
-    }),
+      draft.selectedId = componentList[selectedIndex + 1].fe_id;
+    },
   },
 });
 
@@ -133,6 +133,5 @@ export const {
   pasteComponent,
   selectPrevComponent,
   selectNextComponent,
-
 } = componentsSlice.actions;
 export default componentsSlice.reducer;
