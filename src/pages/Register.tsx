@@ -1,34 +1,34 @@
-import React, { FC } from 'react'
-import { Typography, Space, Form, Input, Button, message } from 'antd'
-import { UserAddOutlined } from '@ant-design/icons'
-import { Link, useNavigate } from 'react-router-dom'
-import { useRequest } from 'ahooks'
-import { LOGIN_PATHNAME } from '../router'
-import { registerService } from '../services/user'
-import styles from './styles/Register.module.scss'
+import React, { FC } from 'react';
+import { Typography, Space, Form, Input, Button, message } from 'antd';
+import { UserAddOutlined } from '@ant-design/icons';
+import { Link, useNavigate } from 'react-router-dom';
+import { useRequest } from 'ahooks';
+import { LOGIN_PATHNAME } from '../router';
+import { registerService } from '../services/user';
+import styles from './styles/Register.module.scss';
 
-const { Title } = Typography
+const { Title } = Typography;
 
 const Register: FC = () => {
-  const nav = useNavigate()
+  const nav = useNavigate();
 
   const { run } = useRequest(
     async values => {
-      const { username, password, nickname } = values
-      await registerService(username, password, nickname)
+      const { username, password, nickname } = values;
+      await registerService(username, password, nickname);
     },
     {
       manual: true,
       onSuccess() {
-        message.success('注册成功')
-        nav(LOGIN_PATHNAME) // 跳转到登录页
+        message.success('注册成功');
+        nav(LOGIN_PATHNAME); // 跳转到登录页
       },
-    }
-  )
+    },
+  );
 
   const onFinish = (values: any) => {
-    run(values) // 调用 ajax
-  }
+    run(values); // 调用 ajax
+  };
 
   return (
     <div className={styles.container}>
@@ -69,9 +69,9 @@ const Register: FC = () => {
               ({ getFieldValue }) => ({
                 validator(_, value) {
                   if (!value || getFieldValue('password') === value) {
-                    return Promise.resolve()
+                    return Promise.resolve();
                   } else {
-                    return Promise.reject(new Error('两次密码不一致'))
+                    return Promise.reject(new Error('两次密码不一致'));
                   }
                 },
               }),
@@ -93,7 +93,7 @@ const Register: FC = () => {
         </Form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Register
+export default Register;

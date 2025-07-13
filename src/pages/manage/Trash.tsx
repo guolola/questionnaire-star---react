@@ -1,43 +1,43 @@
-import React, { FC, useState } from 'react'
-import { useTitle } from 'ahooks'
-import { Typography, Empty, Table, Tag, Button, Space, Modal, Spin, message } from 'antd'
-import { ExclamationCircleOutlined } from '@ant-design/icons'
-import { useRequest } from 'ahooks'
-import ListSearch from '../../components/ListSearch'
-import ListPage from '../../components/ListPage'
-import useLoadQuestionListData from '../../hooks/useLoadQuestionListData'
-import { updateQuestionService, deleteQuestionsService } from '../../services/question'
-import styles from './styles/common.module.scss'
+import React, { FC, useState } from 'react';
+import { useTitle } from 'ahooks';
+import { Typography, Empty, Table, Tag, Button, Space, Modal, Spin, message } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { useRequest } from 'ahooks';
+import ListSearch from '../../components/ListSearch';
+import ListPage from '../../components/ListPage';
+import useLoadQuestionListData from '../../hooks/useLoadQuestionListData';
+import { updateQuestionService, deleteQuestionsService } from '../../services/question';
+import styles from './styles/common.module.scss';
 
-const { Title } = Typography
-const { confirm } = Modal
+const { Title } = Typography;
+const { confirm } = Modal;
 
 const Trash: FC = () => {
-  useTitle('小慕问卷 - 回收站')
+  useTitle('小慕问卷 - 回收站');
 
-  const { data = {}, loading, refresh } = useLoadQuestionListData({ isDeleted: true })
-  const { list = [], total = 0 } = data
+  const { data = {}, loading, refresh } = useLoadQuestionListData({ isDeleted: true });
+  const { list = [], total = 0 } = data;
 
   // 记录选中的 id
-  const [selectedIds, setSelectedIds] = useState<string[]>([])
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   // 恢复
   const { run: recover } = useRequest(
     async () => {
       for await (const id of selectedIds) {
-        await updateQuestionService(id, { isDeleted: false })
+        await updateQuestionService(id, { isDeleted: false });
       }
     },
     {
       manual: true,
       debounceWait: 500, // 防抖
       onSuccess() {
-        message.success('恢复成功')
-        refresh() // 手动刷新列表
-        setSelectedIds([])
+        message.success('恢复成功');
+        refresh(); // 手动刷新列表
+        setSelectedIds([]);
       },
-    }
-  )
+    },
+  );
 
   // 删除
   const { run: deleteQuestion } = useRequest(
@@ -45,12 +45,12 @@ const Trash: FC = () => {
     {
       manual: true,
       onSuccess() {
-        message.success('删除成功')
-        refresh()
-        setSelectedIds([])
+        message.success('删除成功');
+        refresh();
+        setSelectedIds([]);
       },
-    }
-  )
+    },
+  );
 
   function del() {
     confirm({
@@ -58,7 +58,7 @@ const Trash: FC = () => {
       icon: <ExclamationCircleOutlined />,
       content: '删除以后不可以找回',
       onOk: deleteQuestion,
-    })
+    });
   }
 
   const tableColumns = [
@@ -71,7 +71,7 @@ const Trash: FC = () => {
       title: '是否发布',
       dataIndex: 'isPublished',
       render: (isPublished: boolean) => {
-        return isPublished ? <Tag color="processing">已发布</Tag> : <Tag>未发布</Tag>
+        return isPublished ? <Tag color="processing">已发布</Tag> : <Tag>未发布</Tag>;
       },
     },
     {
@@ -82,7 +82,7 @@ const Trash: FC = () => {
       title: '创建时间',
       dataIndex: 'createdAt',
     },
-  ]
+  ];
 
   // 可以把 JSX 片段定义为一个变量
   const TableElem = (
@@ -106,13 +106,13 @@ const Trash: FC = () => {
           rowSelection={{
             type: 'checkbox',
             onChange: selectedRowKeys => {
-              setSelectedIds(selectedRowKeys as string[])
+              setSelectedIds(selectedRowKeys as string[]);
             },
           }}
         />
       </div>
     </>
-  )
+  );
 
   return (
     <>
@@ -137,7 +137,7 @@ const Trash: FC = () => {
         <ListPage total={total} />
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Trash
+export default Trash;

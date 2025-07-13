@@ -22,7 +22,7 @@ function genComponent(componentInfo: ComponentInfoType) {
 const EditCanvas: React.FC<PropsType> = ({ loading }) => {
   const { componentList, selectedId } = useGetComponentInfo();
   const dispatch = useDispatch();
-  function hadleClick(event, id: string) {
+  function hadleClick(event: React.MouseEvent, id: string) {
     event.stopPropagation();
     dispatch(changeSelectedId(id));
   }
@@ -34,21 +34,25 @@ const EditCanvas: React.FC<PropsType> = ({ loading }) => {
     );
   return (
     <div className={styles['canvas']}>
-      {componentList.map(c => {
-        const { fe_id } = c;
-        // 拼接class name
-        const wrapperDefaultClassName = styles['component-wrapper'];
-        const selectedClassnName = styles.selected;
-        const wrapperClassName = classNames({
-          [wrapperDefaultClassName]: true,
-          [selectedClassnName]: fe_id === selectedId,
-        });
-        return (
-          <div key={fe_id} className={wrapperClassName} onClick={e => hadleClick(e, fe_id)}>
-            <div className={styles.component}>{genComponent(c)}</div>
-          </div>
-        );
-      })}
+      {componentList
+        .filter(c => !c.isHidden)
+        .map(c => {
+          const { fe_id , isLocked} = c;
+          // 拼接class name
+          const wrapperDefaultClassName = styles['component-wrapper'];
+          const selectedClassnName = styles.selected;
+          const lockedClassName = styles.locked;
+          const wrapperClassName = classNames({
+            [wrapperDefaultClassName]: true,
+            [selectedClassnName]: fe_id === selectedId,
+            [lockedClassName]: isLocked,
+          });
+          return (
+            <div key={fe_id} className={wrapperClassName} onClick={e => hadleClick(e, fe_id)}>
+              <div className={styles.component}>{genComponent(c)}</div>
+            </div>
+          );
+        })}
     </div>
   );
 };
