@@ -4,6 +4,7 @@ import { Layout, Typography, Space, Spin } from 'antd';
 import { StarOutlined, HeartOutlined, GlobalOutlined } from '@ant-design/icons';
 import Logo from '../components/Logo';
 import UserInfo from '../components/UserInfo';
+import ModernLoading from '../components/ModernLoading';
 import styles from './styles/MainLayout.module.scss';
 
 const { Header, Content } = Layout;
@@ -19,7 +20,7 @@ const MainLayout = () => {
     // 模拟一个短暂的loading时间
     setTimeout(() => {
       setLoading(false);
-    }, 300);
+    }, 800);
   };
 
   return (
@@ -53,7 +54,6 @@ const MainLayout = () => {
                 className={styles.navLink}
                 style={{ cursor: 'pointer' }}
               >
-                {loading ? <Spin size="small" style={{ marginRight: '8px' }} /> : null}
                 我的问卷
               </a>
               <Link to="/about" className={styles.navLink}>关于我们</Link>
@@ -69,7 +69,14 @@ const MainLayout = () => {
 
       <Content className={styles.main}>
         <div className={styles.contentWrapper}>
-          <div className={styles.mainContent}>
+          <div className={styles.mainContent} style={{ position: 'relative' }}>
+            {loading && (
+              <ModernLoading 
+                visible={loading}
+                text="正在跳转到我的问卷..."
+                type="dots"
+              />
+            )}
             <Outlet />
           </div>
         </div>

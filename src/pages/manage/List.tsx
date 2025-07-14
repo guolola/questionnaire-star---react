@@ -5,6 +5,7 @@ import { useSearchParams } from 'react-router-dom';
 import { getQuestionListService } from '../../services/question';
 import QuestionCard from '../../components/QuestionCard';
 import ListSearch from '../../components/ListSearch';
+import ModernLoading from '../../components/ModernLoading';
 import { LIST_PAGE_SIZE, LIST_SEARCH_PARAM_KEY } from '../../constant/index';
 import styles from './styles/common.module.scss';
 
@@ -98,43 +99,44 @@ const List: FC = () => {
   const LoadMoreContentElem = useMemo(() => {
     // 初始加载不在这里显示，在上面的grid-layout中显示
     if (list.length === 0) return null;
-    if (loading) return <Spin />;
-    if (!haveMoreData) return <span>没有更多了...</span>;
-    return <span>开始加载下一页</span>;
+    if (loading) return <Spin size="small" />;
+    if (!haveMoreData) return <span style={{ color: 'var(--text-secondary)' }}>没有更多了...</span>;
+    return <span style={{ color: 'var(--text-secondary)' }}>开始加载下一页</span>;
   }, [started, loading, haveMoreData, list.length]);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <div className={styles.left}>
-          <Title level={3}>我的问卷</Title>
+    <>
+      <ModernLoading 
+        visible={loading && list.length === 0}
+        text="正在加载问卷列表..."
+        type="spinner"
+      />
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <div className={styles.left}>
+            <Title level={3}>我的问卷</Title>
+          </div>
+          <div className={styles.right}>
+            <ListSearch />
+          </div>
         </div>
-        <div className={styles.right}>
-          <ListSearch />
+        <div className={styles.content}>
+          <div className={`${styles['grid-layout']}`}>
+            {/* 空状态 */}
+            {!loading && list.length === 0 && started && <Empty description="暂无数据" />}
+            {/* 问卷列表 */}
+            {list.length > 0 &&
+              list.map((q: any) => {
+                const { _id } = q;
+                return <QuestionCard key={_id} {...q} />;
+              })}
+          </div>
+          <div className={styles.pagination}>
+            <div ref={containerRef}>{LoadMoreContentElem}</div>
+          </div>
         </div>
       </div>
-      <div className={styles.content}>
-        <div className={`${styles['grid-layout']}`}>
-          {/* 加载状态 */}
-          {loading && list.length === 0 && (
-            <div style={{ textAlign: 'center' }}>
-              <Spin size="large" />
-            </div>
-          )}
-          {/* 空状态 */}
-          {!loading && list.length === 0 && started && <Empty description="暂无数据" />}
-          {/* 问卷列表 */}
-          {list.length > 0 &&
-            list.map((q: any) => {
-              const { _id } = q;
-              return <QuestionCard key={_id} {...q} />;
-            })}
-        </div>
-        <div className={styles.pagination}>
-          <div ref={containerRef}>{LoadMoreContentElem}</div>
-        </div>
-      </div>
-    </div>
+    </>
   );
 };
 

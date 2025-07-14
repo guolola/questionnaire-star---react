@@ -4,6 +4,7 @@ import { Typography, Empty, Spin } from 'antd';
 import QuestionCard from '../../components/QuestionCard';
 import ListSearch from '../../components/ListSearch';
 import ListPage from '../../components/ListPage';
+import ModernLoading from '../../components/ModernLoading';
 import useLoadQuestionListData from '../../hooks/useLoadQuestionListData';
 import styles from './styles/common.module.scss';
 
@@ -16,34 +17,38 @@ const Star: FC = () => {
   const { list = [], total = 0 } = data;
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <div className={styles.left}>
-          <Title level={3}>星标问卷</Title>
+    <>
+      <ModernLoading 
+        visible={loading && list.length === 0}
+        text="正在加载星标问卷..."
+        type="progress"
+        showProgress={true}
+        progress={loading ? 65 : 100}
+      />
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <div className={styles.left}>
+            <Title level={3}>星标问卷</Title>
+          </div>
+          <div className={styles.right}>
+            <ListSearch />
+          </div>
         </div>
-        <div className={styles.right}>
-          <ListSearch />
+        <div className={styles.content}>
+          <div className={`${styles['grid-layout']}`}>
+            {!loading && list.length === 0 && <Empty description="暂无数据" />}
+            {list.length > 0 &&
+              list.map((q: any) => {
+                const { _id } = q;
+                return <QuestionCard key={_id} {...q} />;
+              })}
+          </div>
+          <div className={styles.pagination}>
+            <ListPage total={total} />
+          </div>
         </div>
       </div>
-      <div className={styles.content}>
-        <div className={`${styles['grid-layout']}`}>
-          {loading && (
-            <div style={{ textAlign: 'center' }}>
-              <Spin />
-            </div>
-          )}
-          {!loading && list.length === 0 && <Empty description="暂无数据" />}
-          {list.length > 0 &&
-            list.map((q: any) => {
-              const { _id } = q;
-              return <QuestionCard key={_id} {...q} />;
-            })}
-        </div>
-        <div className={styles.pagination}>
-          <ListPage total={total} />
-        </div>
-      </div>
-    </div>
+    </>
   );
 };
 

@@ -5,6 +5,7 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
 import ListSearch from '../../components/ListSearch';
 import ListPage from '../../components/ListPage';
+import ModernLoading from '../../components/ModernLoading';
 import useLoadQuestionListData from '../../hooks/useLoadQuestionListData';
 import { updateQuestionService, deleteQuestionsService } from '../../services/question';
 import styles from './styles/common.module.scss';
@@ -115,30 +116,32 @@ const Trash: FC = () => {
   );
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <div className={styles.left}>
-          <Title level={3}>回收站</Title>
+    <>
+      <ModernLoading 
+        visible={loading && list.length === 0}
+        text="正在加载回收站数据..."
+        type="dots"
+      />
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <div className={styles.left}>
+            <Title level={3}>回收站</Title>
+          </div>
+          <div className={styles.right}>
+            <ListSearch />
+          </div>
         </div>
-        <div className={styles.right}>
-          <ListSearch />
+        <div className={styles.content}>
+          <div className={`${styles['table-layout']}`}>
+            {!loading && list.length === 0 && <Empty description="暂无数据" />}
+            {list.length > 0 && TableElem}
+          </div>
+          <div className={styles.pagination}>
+            <ListPage total={total} />
+          </div>
         </div>
       </div>
-      <div className={styles.content}>
-        <div className={`${styles['table-layout']}`}>
-          {loading && (
-            <div style={{ textAlign: 'center' }}>
-              <Spin />
-            </div>
-          )}
-          {!loading && list.length === 0 && <Empty description="暂无数据" />}
-          {list.length > 0 && TableElem}
-        </div>
-        <div className={styles.pagination}>
-          <ListPage total={total} />
-        </div>
-      </div>
-    </div>
+    </>
   );
 };
 
