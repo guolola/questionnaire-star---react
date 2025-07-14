@@ -1,30 +1,71 @@
+@import '../../../../styles/theme.scss';
+
 .header-wrapper {
-  background-color: #fff;
-  border-bottom: 1px solid #e8e8e8;
-  padding: 12px 0;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-light);
+  padding: var(--spacing-md) 0;
+  position: relative;
+  
+  // 添加微妙的阴影
+  box-shadow: var(--shadow-sm);
+  
+  // 添加渐变背景
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, 
+      rgba(99, 102, 241, 0.02) 0%, 
+      rgba(139, 92, 246, 0.02) 50%, 
+      rgba(99, 102, 241, 0.02) 100%
+    );
+    pointer-events: none;
+  }
 }
 
 .header {
   display: flex;
-  margin: 0 24px;
+  align-items: center;
+  margin: 0 var(--spacing-lg);
+  position: relative;
+  z-index: 1;
 
   h1 {
-    font-size: 18px;
+    font-size: var(--font-size-xl);
+    font-weight: 600;
     margin-bottom: 0;
     line-height: 1;
+    color: var(--text-primary);
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .left {
     flex: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
   }
 
   .main {
     flex: 1;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .right {
     flex: 1;
     text-align: right;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: var(--spacing-sm);
   }
 }

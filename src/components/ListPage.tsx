@@ -35,7 +35,16 @@ const ListPage: FC<PropsType> = (props: PropsType) => {
   }
 
   return (
-    <Pagination current={current} pageSize={pageSize} total={total} onChange={handlePageChange} />
+    <Pagination 
+      current={current} 
+      pageSize={pageSize} 
+      total={total} 
+      onChange={handlePageChange}
+      showSizeChanger={true}
+      showQuickJumper={true}
+      showTotal={(total, range) => `共 ${total} 条数据`}
+      hideOnSinglePage={false}
+    />
   );
 };
 

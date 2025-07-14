@@ -71,21 +71,22 @@ const Login: FC = () => {
 
   return (
     <div className={styles.container}>
-      <div>
-        <Space>
-          <Title level={2}>
-            <UserAddOutlined />
-          </Title>
-          <Title level={2}>用户登录</Title>
-        </Space>
-      </div>
-      <div>
+      <div className={styles.formWrapper}>
+        <div className={styles.header}>
+          <div className={styles.logo}>
+            <UserAddOutlined className={styles.logoIcon} />
+            <Title level={2} className={styles.logoText}>问卷星</Title>
+          </div>
+          <Title level={3} className={styles.title}>用户登录</Title>
+          <p className={styles.subtitle}>欢迎回来，请登录您的账户</p>
+        </div>
+        
         <Form
-          labelCol={{ span: 6 }}
-          wrapperCol={{ span: 16 }}
+          layout="vertical"
           initialValues={{ remember: true }}
           onFinish={onFinish}
           form={form}
+          className={styles.form}
         >
           <Form.Item
             label="用户名"
@@ -96,26 +97,47 @@ const Login: FC = () => {
               { pattern: /^\w+$/, message: '只能是字母数字下划线' },
             ]}
           >
-            <Input />
+            <Input 
+              size="large" 
+              placeholder="请输入用户名"
+              className={styles.input}
+            />
           </Form.Item>
+          
           <Form.Item
             label="密码"
             name="password"
             rules={[{ required: true, message: '请输入密码' }]}
           >
-            <Input.Password />
+            <Input.Password 
+              size="large" 
+              placeholder="请输入密码"
+              className={styles.input}
+            />
           </Form.Item>
-          <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 6, span: 16 }}>
-            <Checkbox>记住我</Checkbox>
+          
+          <Form.Item name="remember" valuePropName="checked">
+            <Checkbox className={styles.checkbox}>记住我</Checkbox>
           </Form.Item>
-          <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
-            <Space>
-              <Button type="primary" htmlType="submit">
-                登录
-              </Button>
-              <Link to={REGISTER_PATHNAME}>注册新用户</Link>
-            </Space>
+          
+          <Form.Item>
+            <Button 
+              type="primary" 
+              htmlType="submit" 
+              size="large"
+              className={styles.submitButton}
+              block
+            >
+              登录
+            </Button>
           </Form.Item>
+          
+          <div className={styles.footer}>
+            <span>还没有账户？</span>
+            <Link to={REGISTER_PATHNAME} className={styles.link}>
+              立即注册
+            </Link>
+          </div>
         </Form>
       </div>
     </div>

@@ -1,10 +1,24 @@
 .container {
   width: 200px;
-  text-align: center;
+  text-align: left;
   line-height: 1;
 
   h1 {
-    font-size: 32px;
-    color: #f7f7f7;
+    font-size: 28px;
+    color: var(--text-primary);
+    font-weight: 700;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    transition: all var(--transition-fast);
+  }
+  
+  a {
+    text-decoration: none;
+    
+    &:hover {
+      h1 {
+        color: var(--primary-color);
+        transform: scale(1.02);
+      }
+    }
   }
 }

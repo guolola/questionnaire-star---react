@@ -1,29 +1,109 @@
+@import '../../../../styles/theme.scss';
+
 .canvas {
   min-height: 100%;
-  background-color: #fff;
+  background: var(--bg-primary);
   overflow: hidden;
+  position: relative;
+  
+  // 添加微妙的纸张纹理
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      radial-gradient(circle at 25% 25%, rgba(99, 102, 241, 0.02) 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, rgba(139, 92, 246, 0.02) 0%, transparent 50%);
+    pointer-events: none;
+  }
 }
 
 .component-wrapper {
-  margin: 12px;
-  border: 1px solid #fff;
-  padding: 12px;
-  border-radius: 3px;
-
+  margin: var(--spacing-md);
+  border: 2px solid transparent;
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  position: relative;
+  background: var(--bg-primary);
+  
   &:hover {
-    border-color: #d9d9d9;
+    border-color: var(--border-medium);
+    background: var(--bg-secondary);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  // 添加拖拽指示器
+  &::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 12px;
+    height: 12px;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 1px,
+      var(--border-light) 1px,
+      var(--border-light) 2px
+    );
+    border-radius: 2px;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+  }
+  
+  &:hover::after {
+    opacity: 1;
   }
 }
 
 .selected {
-  border-color: #1890ff !important;
+  border-color: var(--primary-color) !important;
+  background: rgba(99, 102, 241, 0.03) !important;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1) !important;
+  transform: translateY(-2px) !important;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-md);
+    z-index: -1;
+    opacity: 0.1;
+  }
 }
 
 .locked {
-  opacity: 0.5;
+  opacity: 0.6;
   cursor: not-allowed;
+  background: var(--bg-tertiary) !important;
+  
+  &::after {
+    content: '🔒';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    font-size: 12px;
+    opacity: 0.7;
+  }
+  
+  &:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
 }
 
 .component {
-  pointer-events: none; // 屏蔽鼠标行为，组件不让被点击到
+  pointer-events: none;
+  position: relative;
+  z-index: 1;
 }

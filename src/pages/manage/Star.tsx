@@ -16,7 +16,7 @@ const Star: FC = () => {
   const { list = [], total = 0 } = data;
 
   return (
-    <>
+    <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.left}>
           <Title level={3}>星标问卷</Title>
@@ -26,22 +26,24 @@ const Star: FC = () => {
         </div>
       </div>
       <div className={styles.content}>
-        {loading && (
-          <div style={{ textAlign: 'center' }}>
-            <Spin />
-          </div>
-        )}
-        {!loading && list.length === 0 && <Empty description="暂无数据" />}
-        {list.length > 0 &&
-          list.map((q: any) => {
-            const { _id } = q;
-            return <QuestionCard key={_id} {...q} />;
-          })}
+        <div className={`${styles['grid-layout']}`}>
+          {loading && (
+            <div style={{ textAlign: 'center' }}>
+              <Spin />
+            </div>
+          )}
+          {!loading && list.length === 0 && <Empty description="暂无数据" />}
+          {list.length > 0 &&
+            list.map((q: any) => {
+              const { _id } = q;
+              return <QuestionCard key={_id} {...q} />;
+            })}
+        </div>
+        <div className={styles.pagination}>
+          <ListPage total={total} />
+        </div>
       </div>
-      <div className={styles.footer}>
-        <ListPage total={total} />
-      </div>
-    </>
+    </div>
   );
 };
 

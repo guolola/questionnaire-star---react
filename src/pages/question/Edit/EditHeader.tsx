@@ -39,7 +39,7 @@ const TitleElem: FC = () => {
 
   return (
     <Space>
-      <Title>{title}</Title>
+      <Title style={{ margin: 0 }}>{title}</Title>
       <Button icon={<EditOutlined />} type="text" onClick={() => SetEditState(true)} />
     </Space>
   );

@@ -1,16 +1,51 @@
-.wrapper {
-  margin-bottom: 12px;
-  cursor: pointer;
-  background-color: #f7f7f7;
-  border: 1px solid #f7f7f7;
-  padding: 12px;
-  border-radius: 3px;
+@import '../../../../styles/theme.scss';
 
+.wrapper {
+  margin-bottom: var(--spacing-md);
+  cursor: pointer;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+  
+  // 添加微妙的渐变背景
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  
   &:hover {
-    border-color: #d9d9d9;
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  }
+  
+  &:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  // 添加左侧彩色边框
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--gradient-primary);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+  }
+  
+  &:hover::before {
+    opacity: 1;
   }
 }
 
 .component {
-  pointer-events: none; // 屏蔽鼠标的行为
+  pointer-events: none;
+  position: relative;
+  z-index: 1;
 }

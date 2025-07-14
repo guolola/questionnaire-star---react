@@ -1,21 +1,354 @@
+@import '../../../styles/theme.scss';
+
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: var(--spacing-lg);
+}
+
 .header {
   display: flex;
-  margin-bottom: 20px;
-
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
+  flex-shrink: 0;
+  
   .left {
     flex: 1;
+    
+    h3 {
+      margin: 0 !important;
+      color: var(--text-primary);
+      font-weight: 600;
+      font-size: var(--font-size-2xl);
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
   }
 
   .right {
     flex: 1;
     text-align: right;
+    
+    // 搜索组件样式优化
+    :global(.ant-input-search) {
+      max-width: 300px;
+      
+      .ant-input {
+        border-radius: var(--radius-md);
+        border: 1px solid var(--border-light);
+        padding: var(--spacing-sm) var(--spacing-md);
+        
+        &:focus {
+          border-color: var(--primary-color);
+          box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+        }
+      }
+      
+      .ant-input-search-button {
+        border-radius: 0 var(--radius-md) var(--radius-md) 0;
+        background: var(--gradient-primary);
+        border: none;
+        
+        &:hover {
+          background: var(--gradient-primary);
+          transform: scale(1.02);
+        }
+      }
+    }
   }
 }
 
 .content {
-  margin-bottom: 20px;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  
+  // 默认网格布局（用于卡片列表）
+  .grid-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: var(--spacing-2xl);
+    padding: var(--spacing-xl) var(--spacing-xl) var(--spacing-md);
+    align-content: start;
+    flex: 1;
+    overflow-y: auto;
+    
+    > * {
+      max-width: 100%;
+      overflow: hidden;
+    }
+  }
+  
+  // 表格布局（用于回收站等）
+  .table-layout {
+    display: block;
+    padding: var(--spacing-md);
+    min-height: 0;
+    flex: 1;
+    
+    // 操作按钮区域
+    > div:first-child {
+      margin-bottom: var(--spacing-lg);
+      padding: var(--spacing-md) var(--spacing-lg);
+      background: var(--bg-primary);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+    }
+    
+    // 表格容器
+    > div:last-child {
+      background: var(--bg-primary);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      border: 1px solid var(--border-light);
+      
+      .ant-table {
+        .ant-table-thead > tr > th {
+          background: var(--bg-secondary);
+          color: var(--text-primary);
+          font-weight: 600;
+          border-bottom: 2px solid var(--border-medium);
+        }
+        
+        .ant-table-tbody > tr {
+          &:hover > td {
+            background: var(--bg-secondary);
+          }
+          
+          > td {
+            border-bottom: 1px solid var(--border-light);
+            padding: var(--spacing-md) var(--spacing-lg);
+          }
+        }
+      }
+    }
+  }
+}
+
+.pagination {
+  padding: var(--spacing-md) var(--spacing-xl);
+  background: var(--bg-primary);
+  border-top: 1px solid var(--border-light);
+  flex-shrink: 0;
+  z-index: 10;
+  
+  // 分页器样式
+  :global(.ant-pagination) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    .ant-pagination-item {
+      border-color: var(--border-light);
+      
+      &:hover {
+        border-color: var(--primary-color);
+      }
+      
+      &.ant-pagination-item-active {
+        background: var(--primary-color);
+        border-color: var(--primary-color);
+      }
+    }
+    
+    .ant-pagination-prev,
+    .ant-pagination-next {
+      border-color: var(--border-light);
+      
+      &:hover {
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+      }
+    }
+  }
+  
+  // 加载更多内容样式
+  > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50px;
+    color: var(--text-secondary);
+    font-size: var(--font-size-md);
+    font-weight: 500;
+    
+    .ant-spin {
+      .ant-spin-dot {
+        i {
+          background-color: var(--primary-color);
+        }
+      }
+    }
+    
+    .ant-empty {
+      .ant-empty-description {
+        color: var(--text-secondary);
+      }
+    }
+  }
 }
 
 .footer {
   text-align: center;
+  padding: var(--spacing-md) var(--spacing-lg) var(--spacing-md);
+  flex-shrink: 0;
+  
+  > div {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50px;
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    color: var(--text-secondary);
+    font-size: var(--font-size-md);
+    font-weight: 500;
+    
+    .ant-spin {
+      .ant-spin-dot {
+        i {
+          background-color: var(--primary-color);
+        }
+      }
+    }
+    
+    .ant-empty {
+      .ant-empty-description {
+        color: var(--text-secondary);
+      }
+    }
+  }
+  
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    text-align: center;
+    
+    .left,
+    .right {
+      flex: none;
+      text-align: center;
+    }
+    
+    .right :global(.ant-input-search) {
+      max-width: 100%;
+    }
+  }
+  
+  .content {
+    padding: 0;
+    
+    .grid-layout {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-lg);
+      padding: var(--spacing-md);
+    }
+    
+    .table-layout {
+      padding: var(--spacing-md);
+      
+      > div:first-child {
+        padding: var(--spacing-sm) var(--spacing-md);
+        margin-bottom: var(--spacing-md);
+      }
+      
+      .ant-table {
+        .ant-table-thead > tr > th,
+        .ant-table-tbody > tr > td {
+          padding: var(--spacing-sm) var(--spacing-md);
+          font-size: var(--font-size-sm);
+        }
+      }
+    }
+  }
+  
+  .pagination {
+    padding: var(--spacing-md);
+  }
+  
+  .footer {
+    padding: var(--spacing-md);
+    margin-top: var(--spacing-md);
+    
+    > div {
+      min-height: 50px;
+      padding: var(--spacing-sm) var(--spacing-md);
+    }
+  }
+}
+
+// 问卷卡片全局样式优化
+:global(.question-card) {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+  overflow: hidden;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-color);
+  }
+  
+  .ant-card-body {
+    padding: var(--spacing-lg);
+  }
+  
+  .ant-card-meta-title {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .ant-card-meta-description {
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+  
+  .ant-card-actions {
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border-light);
+    
+    > li {
+      margin: 0;
+      
+      > span {
+        padding: var(--spacing-sm) var(--spacing-md);
+        color: var(--text-secondary);
+        transition: all var(--transition-fast);
+        
+        &:hover {
+          color: var(--primary-color);
+          background: var(--bg-primary);
+        }
+      }
+    }
+  }
 }

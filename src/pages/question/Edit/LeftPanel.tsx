@@ -26,7 +26,7 @@ const LeftPanel = () => {
     },
   ];
 
-  return <Tabs defaultActiveKey="componentLib" items={tabsItems} />;
+  return <Tabs defaultActiveKey="componentLib" items={tabsItems} className="modern-tabs" />;
 };
 
 export default LeftPanel;

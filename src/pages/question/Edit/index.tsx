@@ -27,7 +27,7 @@ const Edit = () => {
           </div>
           <div className={styles.main} onClick={clearSelected}>
             <div className={styles['canvas-wrapper']}>
-              <div style={{ height: '900px' }}>
+              <div className={styles['canvas-content']}>
                 <EditCanvas loading={loading} />
               </div>
             </div>

@@ -1,0 +1,31 @@
+@import '../../styles/theme.scss';
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.loginButton {
+  background: var(--gradient-primary) !important;
+  border: none !important;
+  border-radius: var(--radius-md) !important;
+  font-weight: 500 !important;
+  box-shadow: var(--shadow-sm) !important;
+  transition: all var(--transition-fast) !important;
+  
+  &:hover {
+    background: var(--gradient-primary) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: var(--shadow-md) !important;
+  }
+}
+
+.loginLink {
+  color: var(--text-white) !important;
+  text-decoration: none !important;
+  
+  &:hover {
+    color: var(--text-white) !important;
+  }
+}

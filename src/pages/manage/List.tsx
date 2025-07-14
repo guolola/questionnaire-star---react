@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState, useRef, useMemo } from 'react';
+import React, { type FC, useEffect, useState, useRef, useMemo } from 'react';
 import { Typography, Spin, Empty } from 'antd';
 import { useTitle, useDebounceFn, useRequest } from 'ahooks';
 import { useSearchParams } from 'react-router-dom';
@@ -74,6 +74,14 @@ const List: FC = () => {
   useEffect(() => {
     tryLoadMore(); // 加载第一页，初始化
   }, [searchParams]);
+  
+  // 初始加载效果
+  useEffect(() => {
+    if (list.length === 0 && !started) {
+      load();
+      setStarted(true);
+    }
+  }, []);
 
   // 2. 当页面滚动时，要尝试触发加载
   useEffect(() => {
@@ -88,14 +96,15 @@ const List: FC = () => {
 
   // LoadMore Elem
   const LoadMoreContentElem = useMemo(() => {
-    if (!started || loading) return <Spin />;
-    if (total === 0) return <Empty description="暂无数据" />;
+    // 初始加载不在这里显示，在上面的grid-layout中显示
+    if (list.length === 0) return null;
+    if (loading) return <Spin />;
     if (!haveMoreData) return <span>没有更多了...</span>;
     return <span>开始加载下一页</span>;
-  }, [started, loading, haveMoreData]);
+  }, [started, loading, haveMoreData, list.length]);
 
   return (
-    <>
+    <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.left}>
           <Title level={3}>我的问卷</Title>
@@ -105,17 +114,27 @@ const List: FC = () => {
         </div>
       </div>
       <div className={styles.content}>
-        {/* 问卷列表 */}
-        {list.length > 0 &&
-          list.map((q: any) => {
-            const { _id } = q;
-            return <QuestionCard key={_id} {...q} />;
-          })}
+        <div className={`${styles['grid-layout']}`}>
+          {/* 加载状态 */}
+          {loading && list.length === 0 && (
+            <div style={{ textAlign: 'center' }}>
+              <Spin size="large" />
+            </div>
+          )}
+          {/* 空状态 */}
+          {!loading && list.length === 0 && started && <Empty description="暂无数据" />}
+          {/* 问卷列表 */}
+          {list.length > 0 &&
+            list.map((q: any) => {
+              const { _id } = q;
+              return <QuestionCard key={_id} {...q} />;
+            })}
+        </div>
+        <div className={styles.pagination}>
+          <div ref={containerRef}>{LoadMoreContentElem}</div>
+        </div>
       </div>
-      <div className={styles.footer}>
-        <div ref={containerRef}>{LoadMoreContentElem}</div>
-      </div>
-    </>
+    </div>
   );
 };
 

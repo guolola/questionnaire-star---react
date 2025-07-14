@@ -87,7 +87,7 @@ const Trash: FC = () => {
   // 可以把 JSX 片段定义为一个变量
   const TableElem = (
     <>
-      <div style={{ marginBottom: '16px' }}>
+      <div>
         <Space>
           <Button type="primary" disabled={selectedIds.length === 0} onClick={recover}>
             恢复
@@ -97,7 +97,7 @@ const Trash: FC = () => {
           </Button>
         </Space>
       </div>
-      <div style={{ border: '1px solid #e8e8e8' }}>
+      <div>
         <Table
           dataSource={list}
           columns={tableColumns}
@@ -115,7 +115,7 @@ const Trash: FC = () => {
   );
 
   return (
-    <>
+    <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.left}>
           <Title level={3}>回收站</Title>
@@ -125,18 +125,20 @@ const Trash: FC = () => {
         </div>
       </div>
       <div className={styles.content}>
-        {loading && (
-          <div style={{ textAlign: 'center' }}>
-            <Spin />
-          </div>
-        )}
-        {!loading && list.length === 0 && <Empty description="暂无数据" />}
-        {list.length > 0 && TableElem}
+        <div className={`${styles['table-layout']}`}>
+          {loading && (
+            <div style={{ textAlign: 'center' }}>
+              <Spin />
+            </div>
+          )}
+          {!loading && list.length === 0 && <Empty description="暂无数据" />}
+          {list.length > 0 && TableElem}
+        </div>
+        <div className={styles.pagination}>
+          <ListPage total={total} />
+        </div>
       </div>
-      <div className={styles.footer}>
-        <ListPage total={total} />
-      </div>
-    </>
+    </div>
   );
 };
 

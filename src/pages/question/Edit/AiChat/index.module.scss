@@ -1,0 +1,280 @@
+@import '../../../../styles/theme.scss';
+
+.aiChat {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+
+  .chatHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-md) var(--spacing-md);
+    border-bottom: 1px solid var(--border-light);
+    background: var(--bg-primary);
+    position: relative;
+    
+    // 添加渐变背景
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--gradient-primary);
+      opacity: 0.05;
+      pointer-events: none;
+    }
+    
+    .headerLeft {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      position: relative;
+      z-index: 1;
+      
+      .anticon {
+        color: var(--primary-color);
+        font-size: var(--font-size-lg);
+      }
+    }
+    
+  }
+
+  .chatMessages {
+    flex: 1;
+    height: 0; // 强制高度为0，让flex生效
+    max-height: 80%; // 设置固定最大高度
+    overflow-y: auto;
+    padding: var(--spacing-md);
+    
+    .emptyState {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      text-align: center;
+      color: var(--text-secondary);
+      
+      &::before {
+        content: '💬';
+        font-size: 48px;
+        margin-bottom: var(--spacing-md);
+        opacity: 0.5;
+      }
+    }
+
+    .messageItem {
+      margin-bottom: var(--spacing-md);
+      animation: slideIn 0.3s ease-out;
+      
+      &.userMessage {
+        display: flex;
+        justify-content: flex-end;
+        
+        .messageCard {
+          background: var(--gradient-primary);
+          color: var(--text-white);
+          max-width: 80%;
+          border: none;
+          border-radius: var(--radius-lg) var(--radius-lg) var(--radius-sm) var(--radius-lg);
+          box-shadow: var(--shadow-md);
+          
+          :global(.ant-card-body) {
+            padding: var(--spacing-sm) var(--spacing-md);
+          }
+          
+          .ant-typography {
+            color: var(--text-white);
+          }
+        }
+      }
+
+      &.aiMessage {
+        display: flex;
+        justify-content: flex-start;
+        
+        .messageCard {
+          background: var(--bg-primary);
+          max-width: 80%;
+          border: 1px solid var(--border-light);
+          border-radius: var(--radius-lg) var(--radius-lg) var(--radius-lg) var(--radius-sm);
+          box-shadow: var(--shadow-sm);
+          
+          :global(.ant-card-body) {
+            padding: var(--spacing-sm) var(--spacing-md);
+          }
+        }
+      }
+    }
+
+    .messageTime {
+      font-size: var(--font-size-xs);
+      color: rgba(255, 255, 255, 0.7);
+      margin-top: var(--spacing-xs);
+      text-align: right;
+    }
+
+    .aiMessage .messageTime {
+      color: var(--text-tertiary);
+    }
+    
+    // 现代化滚动条
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: var(--bg-tertiary);
+      border-radius: var(--radius-full);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--border-medium);
+      border-radius: var(--radius-full);
+      
+      &:hover {
+        background: var(--border-dark);
+      }
+    }
+  }
+
+  .chatInput {
+    padding: var(--spacing-md);
+    border-top: 1px solid var(--border-light);
+    background: var(--bg-primary);
+    
+    .inputContainer {
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-light);
+      background: var(--bg-secondary);
+      transition: all var(--transition-fast);
+      overflow: hidden;
+      
+      &:focus-within {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+      }
+      
+      .inputArea {
+        width: 100%;
+        border: none;
+        background: var(--bg-secondary);
+        margin: var(--spacing-sm) var(--spacing-md) 0 var(--spacing-md);
+        resize: none;
+        outline: none;
+        font-family: inherit;
+        font-size: var(--font-size-sm);
+        line-height: 1.5;
+        min-height: 60px;
+        max-height: 120px;
+        
+        :global(.ant-input) {
+          border: none !important;
+          background: var(--bg-secondary) !important;
+          padding: var(--spacing-sm) var(--spacing-md) !important;
+          box-shadow: none !important;
+          
+          &:focus {
+            border: none !important;
+            box-shadow: none !important;
+            padding: var(--spacing-sm) var(--spacing-md) !important;
+          }
+        }
+      }
+      
+      .inputControls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--spacing-sm) var(--spacing-md);
+        background: var(--bg-secondary);
+        
+        .leftControls {
+          display: flex;
+          align-items: center;
+          gap: var(--spacing-sm);
+          
+          .webSearchToggle {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: var(--spacing-xs);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            
+            &:hover {
+              background: rgba(0, 0, 0, 0.05);
+            }
+            
+            .anticon {
+              font-size: var(--font-size-sm);
+            }
+            
+            .toggleText {
+              font-size: var(--font-size-xs);
+              color: var(--text-secondary);
+            }
+          }
+        }
+        
+        .rightControls {
+          .sendButton {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-md);
+            background: var(--gradient-primary);
+            border: none;
+            color: var(--text-white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-fast);
+            
+            &:hover {
+              background: var(--gradient-primary);
+              transform: scale(1.05);
+              box-shadow: var(--shadow-md);
+            }
+            
+            &:disabled {
+              background: var(--border-medium);
+              transform: none;
+              box-shadow: none;
+            }
+          }
+        }
+      }
+    }
+    
+  }
+}
+
+// 动画效果
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}

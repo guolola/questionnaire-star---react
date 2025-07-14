@@ -1,13 +1,15 @@
 import { Tabs } from 'antd';
-import { FileTextOutlined, SettingOutlined } from '@ant-design/icons';
+import { FileTextOutlined, SettingOutlined, RobotOutlined } from '@ant-design/icons';
 import ComponentProp from './ComponentProp';
 import PageSetting from './pageSetting/index';
+import AiChat from './AiChat/index';
 import { useEffect, useState } from 'react';
 import useGetComponentInfo from '../../../hooks/useGetComponentInfo';
 
 enum TAB_KEYS {
   prop = 'prop',
   pageSetting = 'pageSetting',
+  aiChat = 'aiChat',
 }
 const RightPanel = () => {
   const [activeKey, setActiveKey] = useState(TAB_KEYS.prop);
@@ -39,8 +41,18 @@ const RightPanel = () => {
       ),
       children: <PageSetting />,
     },
+    {
+      key: TAB_KEYS.aiChat,
+      label: (
+        <span>
+          <RobotOutlined></RobotOutlined>
+          AI 助手
+        </span>
+      ),
+      children: <AiChat />,
+    },
   ];
-  return <Tabs activeKey={activeKey} items={tabsItems} />;
+  return <Tabs activeKey={activeKey} items={tabsItems} onChange={setActiveKey} className="modern-tabs" />;
 };
 
 export default RightPanel;
