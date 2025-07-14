@@ -2,6 +2,7 @@ import { createSlice, nanoid } from '@reduxjs/toolkit';
 import { type ComponentPropsType } from '../../components/QuestionComponents';
 import { getNextSelectedId, insertNewComponent } from './utils';
 import cloneDeep from 'lodash/cloneDeep';
+import { arrayMove } from '@dnd-kit/sortable';
 
 export type ComponentInfoType = {
   fe_id: string; // 前端组件唯一标识符
@@ -118,6 +119,12 @@ export const componentsSlice = createSlice({
 
       draft.selectedId = componentList[selectedIndex + 1].fe_id;
     },
+    // 移动组件位置
+    moveComponent: (draft, action) => {
+      const { componentList } = draft;
+      const { oldIndex, newIndex } = action.payload;
+      draft.componentList = arrayMove(componentList, oldIndex, newIndex);
+    },
   },
 });
 
@@ -133,5 +140,6 @@ export const {
   pasteComponent,
   selectPrevComponent,
   selectNextComponent,
+  moveComponent,
 } = componentsSlice.actions;
 export default componentsSlice.reducer;
