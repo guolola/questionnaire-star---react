@@ -10,6 +10,7 @@ import useGetComponentInfo from '../../../hooks/useGetComponentInfo';
 import { changePageTitle } from '../../../store/pageInfoReducer';
 import { updateQuestionService } from '../../../services/question';
 import styles from './styles/EditHeader.module.scss';
+import FeatureStatusIndicator from '../../../components/FeatureStatusIndicator';
 
 const { Title } = Typography;
 
@@ -132,6 +133,18 @@ const EditHeader: FC = () => {
         </div>
         <div className={styles.main}>
           <EditToolbar />
+          <FeatureStatusIndicator 
+            features={{
+              conditionalLogic: true,
+              multiPage: true,
+              validation: true,
+              logicBranching: true,
+              customStyling: true,
+              analytics: true,
+              apiIntegration: true
+            }}
+            style={{ marginLeft: 16 }}
+          />
         </div>
         <div className={styles.right}>
           <Space>

@@ -40,6 +40,8 @@ const SYSTEM_PROMPT = `
 你是一个专业的问卷设计专家。根据用户需求，生成合适的问卷组件配置。
 
 可用组件类型及其属性：
+
+## 基础组件
 1. questionTitle - 标题组件
    props: { title: string, level?: number }
 
@@ -67,12 +69,81 @@ const SYSTEM_PROMPT = `
      list: Array<{ value: string, text: string, checked: boolean }>
    }
 
-设计原则：
+7. questionInfo - 信息展示
+   props: { title: string, desc?: string }
+
+## 交互组件
+8. questionSelect - 下拉选择
+   props: {
+     title: string,
+     options: Array<{ value: string, text: string }>,
+     value?: string
+   }
+
+9. questionDatePicker - 日期选择
+   props: { title: string, placeholder?: string }
+
+10. questionNumber - 数字输入
+    props: { title: string, placeholder?: string }
+
+11. questionSlider - 滑块选择
+    props: { title: string, min?: number, max?: number, value?: number }
+
+## 高级组件
+12. questionMatrix - 矩阵题
+    props: {
+      title: string,
+      rows: Array<{ value: string, text: string }>,
+      columns: Array<{ value: string, text: string }>,
+      isRequired?: boolean
+    }
+
+13. questionRating - 评分组件
+    props: { title: string, max?: number, value?: number }
+
+14. questionRanking - 排序题
+    props: {
+      title: string,
+      options: Array<{ value: string, text: string }>
+    }
+
+15. questionFileUpload - 文件上传
+    props: { title: string, maxSize?: number, accept?: string }
+
+## 商业应用组件
+16. questionImageChoice - 图片选择
+    props: {
+      title: string,
+      options: Array<{ value: string, text: string, image?: string }>,
+      multiple?: boolean
+    }
+
+17. questionContactInfo - 联系信息
+    props: { title: string, fields: Array<string> }
+
+18. questionPayment - 支付组件
+    props: { title: string, amount?: number, currency?: string }
+
+19. questionSignature - 电子签名
+    props: { title: string, required?: boolean }
+
+## 设计原则：
 1. 问卷应有清晰的标题和说明
 2. 问题顺序要合理（基本信息→主要问题→补充信息）
 3. 选项要全面且互斥（单选题）
 4. 避免引导性问题
 5. 根据需求选择合适的组件类型
+6. 对于复杂问卷，可以使用高级组件如矩阵题、排序题等
+7. 商业调查可以使用图片选择、联系信息等组件
+8. 根据数据类型选择合适的输入组件（日期、数字、滑块等）
+
+## 组件选择建议：
+- 基本信息收集：questionInput, questionSelect, questionDatePicker
+- 满意度调查：questionRating, questionSlider, questionMatrix
+- 多选偏好：questionCheckbox, questionImageChoice, questionRanking
+- 详细反馈：questionTextarea, questionMatrix
+- 商业调查：questionPayment, questionContactInfo, questionSignature
+- 文件收集：questionFileUpload
 
 请返回JSON格式的数组，每个元素包含：
 - type: 组件类型
@@ -92,21 +163,27 @@ const SYSTEM_PROMPT = `
     "props": { "text": "请根据您的真实体验填写以下问卷，您的意见对我们很重要。" }
   },
   {
-    "type": "questionInput",
-    "title": "姓名输入",
-    "props": { "title": "请输入您的姓名", "placeholder": "请输入姓名" }
+    "type": "questionRating",
+    "title": "整体满意度",
+    "props": { "title": "请为我们的整体服务打分", "max": 5, "value": 0 }
   },
   {
-    "type": "questionRadio",
-    "title": "性别选择",
+    "type": "questionMatrix",
+    "title": "服务评价",
     "props": {
-      "title": "您的性别",
-      "isVertical": false,
-      "options": [
-        { "value": "male", "text": "男" },
-        { "value": "female", "text": "女" }
+      "title": "请对以下服务项目进行评价",
+      "rows": [
+        { "value": "service", "text": "服务态度" },
+        { "value": "speed", "text": "响应速度" },
+        { "value": "quality", "text": "服务质量" }
       ],
-      "value": ""
+      "columns": [
+        { "value": "1", "text": "非常不满意" },
+        { "value": "2", "text": "不满意" },
+        { "value": "3", "text": "一般" },
+        { "value": "4", "text": "满意" },
+        { "value": "5", "text": "非常满意" }
+      ]
     }
   }
 ]
@@ -352,6 +429,7 @@ export class DeepSeekAPI {
   private validateAndNormalizeProps(type: string, props: any): any {
     // 根据组件类型验证和规范化属性
     switch (type) {
+      // 基础组件
       case 'questionTitle':
         return {
           title: props.title || '标题',
@@ -394,6 +472,111 @@ export class DeepSeekAPI {
             { value: 'option1', text: '选项1', checked: false },
             { value: 'option2', text: '选项2', checked: false }
           ]
+        };
+
+      case 'questionInfo':
+        return {
+          title: props.title || '信息标题',
+          desc: props.desc || '信息描述'
+        };
+
+      // 交互组件
+      case 'questionSelect':
+        return {
+          title: props.title || '下拉选择标题',
+          options: props.options || [
+            { value: 'option1', text: '选项1' },
+            { value: 'option2', text: '选项2' }
+          ],
+          value: props.value || ''
+        };
+
+      case 'questionDatePicker':
+        return {
+          title: props.title || '日期选择',
+          placeholder: props.placeholder || '请选择日期'
+        };
+
+      case 'questionNumber':
+        return {
+          title: props.title || '数字输入',
+          placeholder: props.placeholder || '请输入数字'
+        };
+
+      case 'questionSlider':
+        return {
+          title: props.title || '滑块选择',
+          min: props.min || 0,
+          max: props.max || 100,
+          value: props.value || 0
+        };
+
+      // 高级组件
+      case 'questionMatrix':
+        return {
+          title: props.title || '矩阵题标题',
+          rows: props.rows || [
+            { value: 'row1', text: '行1' },
+            { value: 'row2', text: '行2' }
+          ],
+          columns: props.columns || [
+            { value: 'col1', text: '列1' },
+            { value: 'col2', text: '列2' }
+          ],
+          isRequired: props.isRequired || false
+        };
+
+      case 'questionRating':
+        return {
+          title: props.title || '评分题标题',
+          max: props.max || 5,
+          value: props.value || 0
+        };
+
+      case 'questionRanking':
+        return {
+          title: props.title || '排序题标题',
+          options: props.options || [
+            { value: 'option1', text: '选项1' },
+            { value: 'option2', text: '选项2' }
+          ]
+        };
+
+      case 'questionFileUpload':
+        return {
+          title: props.title || '文件上传',
+          maxSize: props.maxSize || 10,
+          accept: props.accept || '.jpg,.png,.pdf'
+        };
+
+      // 商业应用组件
+      case 'questionImageChoice':
+        return {
+          title: props.title || '图片选择',
+          options: props.options || [
+            { value: 'option1', text: '选项1', image: '' },
+            { value: 'option2', text: '选项2', image: '' }
+          ],
+          multiple: props.multiple || false
+        };
+
+      case 'questionContactInfo':
+        return {
+          title: props.title || '联系信息',
+          fields: props.fields || ['name', 'phone', 'email']
+        };
+
+      case 'questionPayment':
+        return {
+          title: props.title || '支付信息',
+          amount: props.amount || 0,
+          currency: props.currency || 'CNY'
+        };
+
+      case 'questionSignature':
+        return {
+          title: props.title || '电子签名',
+          required: props.required || false
         };
 
       default:

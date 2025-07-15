@@ -1,24 +1,151 @@
 @import '../../../../styles/theme.scss';
 
-.wrapper {
+.libContainer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.searchContainer {
   margin-bottom: var(--spacing-md);
+  padding: var(--spacing-sm);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
+  
+  .searchInput {
+    margin-bottom: var(--spacing-xs);
+    
+    .ant-input {
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+    }
+  }
+  
+  .filterRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-xs);
+    
+    .favoriteFilter {
+      font-size: 11px;
+      height: 24px;
+      
+      &.ant-btn-primary {
+        background: var(--gradient-primary);
+        border: none;
+      }
+    }
+    
+    .componentCount {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+      font-size: 11px;
+      color: var(--text-secondary);
+      
+      .totalCount {
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+.componentsContainer {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 8px;
+  
+  // 强制显示滚动条
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-medium) var(--bg-tertiary);
+  
+  // 现代化滚动条 (Webkit)
+  &::-webkit-scrollbar {
+    width: 8px;
+    background: var(--bg-tertiary);
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-full);
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: var(--border-medium);
+    border-radius: var(--radius-full);
+    border: 2px solid var(--bg-tertiary);
+    
+    &:hover {
+      background: var(--border-dark);
+    }
+  }
+  
+  // 确保滚动条始终可见
+  &::-webkit-scrollbar-thumb:vertical {
+    min-height: 30px;
+  }
+}
+
+.groupContainer {
+  margin-bottom: var(--spacing-xl);
+  
+  &:last-child {
+    margin-bottom: var(--spacing-lg);
+  }
+}
+
+.groupTitle {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  margin: 0 0 var(--spacing-sm) 0 !important;
+  color: var(--text-primary) !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+  &::before {
+    content: '';
+    width: 3px;
+    height: 14px;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-sm);
+    margin-right: var(--spacing-xs);
+  }
+}
+
+.componentsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-sm);
+}
+
+.wrapper {
   cursor: pointer;
   background: var(--bg-secondary);
   border: 1px solid var(--border-light);
-  padding: var(--spacing-md);
+  padding: var(--spacing-sm);
   border-radius: var(--radius-md);
   transition: all var(--transition-fast);
   position: relative;
   overflow: hidden;
+  min-height: 100px; // 确保有足够的高度容纳组件预览
   
   // 添加微妙的渐变背景
   background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
   
   &:hover {
     border-color: var(--primary-color);
-    transform: translateY(-2px);
+    transform: translateY(-1px);
     box-shadow: var(--shadow-md);
     background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    
+    .favoriteBtn {
+      opacity: 1;
+    }
   }
   
   &:active {
@@ -32,7 +159,7 @@
     position: absolute;
     left: 0;
     top: 0;
-    width: 4px;
+    width: 3px;
     height: 100%;
     background: var(--gradient-primary);
     opacity: 0;
@@ -44,8 +171,76 @@
   }
 }
 
+.largeWrapper {
+  min-height: 140px; // 为复杂组件提供更大的高度
+  
+  .component {
+    min-height: 80px;
+    max-height: 120px;
+    
+    // 大组件使用更小的缩放比例
+    > * {
+      transform: scale(0.75);
+    }
+  }
+}
+
 .component {
   pointer-events: none;
   position: relative;
   z-index: 1;
+  
+  // 确保组件内容不会过大
+  font-size: 12px;
+  
+  // 给组件预览更合适的高度，让内容能够完整显示
+  min-height: 60px;
+  max-height: 80px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--spacing-xs);
+  
+  // 让内部的组件能够自适应显示
+  > * {
+    max-width: 100%;
+    transform: scale(0.85);
+    transform-origin: center;
+  }
+}
+
+.componentTitle {
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-bottom: var(--spacing-xs);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.favoriteBtn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: #faad14;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+  &:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+  }
 }

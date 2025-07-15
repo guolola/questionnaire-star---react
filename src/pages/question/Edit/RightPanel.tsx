@@ -1,15 +1,17 @@
 import { Tabs } from 'antd';
-import { FileTextOutlined, SettingOutlined, RobotOutlined } from '@ant-design/icons';
+import { FileTextOutlined, SettingOutlined, RobotOutlined, ThunderboltOutlined } from '@ant-design/icons';
 import ComponentProp from './ComponentProp';
 import PageSetting from './pageSetting/index';
 import AiChat from './AiChat/index';
 import { useEffect, useState } from 'react';
 import useGetComponentInfo from '../../../hooks/useGetComponentInfo';
+import AdvancedFeaturesPanel from './AdvancedFeaturesPanel';
 
 enum TAB_KEYS {
   prop = 'prop',
   pageSetting = 'pageSetting',
   aiChat = 'aiChat',
+  advancedFeatures = 'advancedFeatures',
 }
 const RightPanel = () => {
   const [activeKey, setActiveKey] = useState(TAB_KEYS.prop);
@@ -50,6 +52,16 @@ const RightPanel = () => {
         </span>
       ),
       children: <AiChat />,
+    },
+    {
+      key: TAB_KEYS.advancedFeatures,
+      label: (
+        <span>
+          <ThunderboltOutlined></ThunderboltOutlined>
+          高级功能
+        </span>
+      ),
+      children: <AdvancedFeaturesPanel />,
     },
   ];
   return <Tabs activeKey={activeKey} items={tabsItems} onChange={setActiveKey} className="modern-tabs" />;
