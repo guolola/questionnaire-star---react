@@ -1,7 +1,7 @@
 **English** | [简体中文](./readme-zh-cn.md)
 
 <p align="center">
-  <img src="./docs/brand/icon.svg" width="120" height="120" alt="Questionnaire Star · Editor logo" />
+  <img src="./docs/brand/logo.png" width="120" height="120" alt="Questionnaire Star · Editor logo" />
 </p>
 
 <div align="center">
@@ -10,7 +10,8 @@
 
 <p>
   <strong>A visual workspace for building questionnaires</strong><br />
-  Compose questions · Arrange the canvas · Review response statistics
+  Build questionnaires from reusable components in a visual editing workspace.<br />
+  <sub>Compose questions · Arrange the canvas · Review response statistics</sub>
 </p>
 
 <p>
@@ -26,6 +27,8 @@
   <img src="https://img.shields.io/badge/Build-Vite%207-646cff?style=flat-square" alt="Build: Vite 7" />
 </p>
 
+> Compose questions, refine the flow, understand the responses. Keep question components, canvas settings and analysis views together in one visual workspace.
+
 </div>
 
 ## Overview
@@ -34,7 +37,35 @@ A React and TypeScript questionnaire editor with an Ant Design interface. Build 
 
 This repository contains the **editor frontend**. Authentication, persistence and statistics depend on a separate API service; the backend is not included. The companion [respondent prototype](https://github.com/guolola/qustion-star-c) is maintained separately and is not yet connected end to end.
 
-## Capabilities
+[Choose a workflow](#choose-a-workflow) · [Explore capabilities](#core-capabilities) · [Run locally](#quick-start) · [Explore the architecture](#architecture)
+
+## Choose a Workflow
+
+| Start here | How to work | What it depends on |
+| --- | --- | --- |
+| Build a questionnaire | Add components, sort the canvas, edit properties and page settings | Editor state; API needed for loading and saving |
+| Draft with AI | Describe the survey in the AI panel and review the generated question configuration | A configured AI service; the bundled key is empty |
+| Review responses | Open the statistics route and inspect question-level charts | Backend integration; current summary cards use sample data |
+
+1. Create or open a questionnaire from the management views.
+2. Compose questions in the component library and arrange their order on the canvas.
+3. Adjust component properties, page settings and any applicable validation rules.
+4. Save through the backend adapter, then implement or connect publishing and collection services.
+
+The [respondent repository](https://github.com/guolola/qustion-star-c) is a separate early prototype. The two repositories do not yet provide a connected publishing-to-submission workflow.
+
+## Interface Preview
+
+The source includes a component-library capture. It shows the existing library UI, rather than an independently verified deployment or a complete questionnaire editor screen.
+
+<details>
+<summary>View the component-library capture</summary>
+
+<p align="center"><img src="./1752586709452.png" width="360" alt="Existing source capture of the questionnaire component library" /></p>
+
+</details>
+
+## Core Capabilities
 
 | Area | Included in the source |
 | --- | --- |
@@ -47,7 +78,20 @@ This repository contains the **editor frontend**. Authentication, persistence an
 
 Advanced controls are implementation entry points, not a guarantee of complete backend behavior. Payment, file upload and signature components require application-specific services before real use.
 
+### Current Scope
+
+| Capability | Frontend source | Additional work |
+| --- | :---: | --- |
+| Question components and property editors | Included | Verify each component against the intended question schema |
+| Drag sorting, copy/paste, hide and lock | Included | Exercise the editing workflow with real questionnaire data |
+| Authentication and questionnaire persistence | API adapters | Supply and configure a compatible backend |
+| Response statistics | UI and chart components | Replace sample summary figures and connect actual answers |
+| File upload, payment and signature | UI components | Connect the relevant storage or business services |
+| Published questionnaire collection | Separate prototype | Define and integrate the publishing and submission contracts |
+
 ## Quick Start
+
+### 1. Install and start
 
 Use Node.js 22.12+ and npm. From a terminal:
 
@@ -60,17 +104,17 @@ npm run dev
 
 Open the local URL printed by Vite (normally `http://localhost:5173`).
 
-### Connect a backend
+### 2. Connect a backend
 
 The development proxy in `vite.config.ts` forwards `/api` to `http://localhost:3001`. Run a compatible backend there or change the proxy target. Service adapters under `src/services` define user, questionnaire and statistics endpoints and expect a response envelope shaped like `{ errno: 0, data: ... }`.
 
 The small mock file in `src/_mock` is not a complete backend and is not loaded by the app entry point. Without a backend, authenticated management flows cannot work fully. For deployment, configure `/api` routing and SPA fallback in your hosting service; Vite's development proxy is not used in the production build.
 
-### AI integration
+### 3. Configure AI assistance
 
 The migrated source has no bundled API key. The DeepSeek client in `src/services/deepseekApi.ts` currently has an empty default key. For a shared deployment, keep provider credentials on your server and route AI requests through an authenticated backend. Do not put a real key in frontend code or a `VITE_*` variable: browser bundles expose those values.
 
-## Project Structure
+## Architecture
 
 | Directory | Responsibility |
 | --- | --- |
@@ -82,7 +126,7 @@ The migrated source has no bundled API key. The DeepSeek client in `src/services
 | `src/services` | Backend and AI client adapters |
 | `src/utils` | Validation, branching and other advanced helpers |
 
-## Commands
+## Common Commands
 
 | Command | Purpose |
 | --- | --- |
@@ -95,6 +139,14 @@ The migrated source has no bundled API key. The DeepSeek client in `src/services
 ## Migration Notes
 
 Imported from [Gitee](https://gitee.com/guolola/questionnaire-star---react). Historical commits were sanitized to remove a hardcoded provider credential, so affected commit hashes differ from the source repository. Author and timestamp metadata were retained. Exposed credentials must still be revoked at the provider.
+
+## Documentation
+
+- [Question component registry](./src/components/QuestionComponents/index.ts)
+- [Application routes](./src/router/index.tsx)
+- [Development proxy](./vite.config.ts)
+- [Questionnaire API adapter](./src/services/question.ts)
+- [Respondent prototype](https://github.com/guolola/qustion-star-c)
 
 ## License
 
